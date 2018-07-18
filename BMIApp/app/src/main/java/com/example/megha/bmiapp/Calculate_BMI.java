@@ -1,17 +1,24 @@
 package com.example.megha.bmiapp;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class Calculate_BMI extends AppCompatActivity {
 
+    InClassDatabaseHelper helper;
+    Button calculateBMIButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate__bmi);
+        helper = new InClassDatabaseHelper(this);
+
     }
 
     public void calculateBMI(View view)
@@ -35,6 +42,10 @@ public class Calculate_BMI extends AppCompatActivity {
 
         //use DecimalFormat to limit to 2 Decimal Places
         result.setText(calc.toString());
+
+
+        helper.saveBMIData(heightVal,weightVal,calc);
+
 
     }
 }
