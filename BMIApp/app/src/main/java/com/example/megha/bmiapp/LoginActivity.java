@@ -41,9 +41,6 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends Activity  {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
     private static final int REQUEST_READ_CONTACTS = 0;
 
     // UI references.
@@ -67,7 +64,8 @@ public class LoginActivity extends Activity  {
 
                 String UserName = mUserName.getText().toString();
                 String Password = mPasswordView.getText().toString();
-                if (UserName.equalsIgnoreCase("Meghana") && Password.equals("Meghana@17")){
+                if (UserName.equalsIgnoreCase("Meghana") && Password.equals("Meghana@17") ||
+                UserName.equalsIgnoreCase("test") && Password.equals("1234")){
                     Intent MainIntent = new Intent(LoginActivity.this,Calculate_BMI.class);
                     startActivity(MainIntent);
                     Toast.makeText(LoginActivity.this, "You are sign in successfully.", Toast.LENGTH_LONG).show();
@@ -82,10 +80,16 @@ public class LoginActivity extends Activity  {
         });
 
         Button btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-
 
 }

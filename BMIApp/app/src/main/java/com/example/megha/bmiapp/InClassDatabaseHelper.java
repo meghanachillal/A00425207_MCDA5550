@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
+import android.util.Log;
+
 import java.util.Date;
 
 public class InClassDatabaseHelper extends SQLiteOpenHelper{
@@ -59,8 +61,10 @@ public class InClassDatabaseHelper extends SQLiteOpenHelper{
 
     public Cursor getBMIHistoryData(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor data = db.query(InClassDatabaseHelper.TABLE_NAME1, new String[]{"HEIGHT"}, null, null, null, null, null);
+        Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME1, null);
+        Log.d("data", "data"+data);
         return  data;
+
     }
 
     @Override

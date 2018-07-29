@@ -11,6 +11,7 @@ import  android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText resultPassword;
     EditText resultHealthCardNumber;
     EditText resultDate;
+    EditText resultHeight;
     Button personSubmitButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resultName = (EditText) findViewById(R.id.textName);
         resultDate = (EditText) findViewById(R.id.textDate);
         personSubmitButton = (Button) findViewById(R.id.buttonPersonSubmit);
-
         resultDate.setOnClickListener(this);
         personSubmitButton.setOnClickListener(this);
-
         simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-
 
         helper = new InClassDatabaseHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        //Run a query
         Cursor cursor = db.query(InClassDatabaseHelper.TABLE_NAME, new String[]{"NAME", "PASSWORD", "DATE", "HEALTH_CARD_NUMB"}, null, null, null, null, null);
-
 
         if (cursor.moveToFirst()) {
             Log.d("Cursor", String.valueOf(cursor.getCount()));
@@ -69,11 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setDateOfBirthField();
     }
 
-//    public void onClickEnter(View view) {
-//        Intent intent = new Intent(this, Calculate_BMI.class);
-//
-//        startActivity(intent);
-//    }
 
     private void setDateOfBirthField() {
         Calendar calendar = Calendar.getInstance();
@@ -87,11 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 resultDate.setText(simpleDateFormat.format(newDate.getTime()));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-
-
-
     }
-
 
     @Override
     public void onClick(View view) {
@@ -106,13 +94,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 resultName = (EditText) findViewById(R.id.textName);
                 resultPassword = (EditText) findViewById(R.id.textPassword);
                 resultDate = (EditText)findViewById(R.id.textDate);
+                resultHeight = (EditText) findViewById(R.id.textHeight);
+
                 String name = resultName.getText().toString();
                 String password = resultPassword.getText().toString();
                 String healthCardNumber = resultHealthCardNumber.getText().toString();
                 String dateOfBirth = resultDate.getText().toString();
-                helper.savePersonData(name,password,healthCardNumber,dateOfBirth);
-                Intent intent = new Intent(this, Calculate_BMI.class);
-                startActivity(intent);
+                String height = resultDate.getText().toString();
+
+                if (!name.equals("") && !password.equals("") && !healthCardNumber.equals("") && !dateOfBirth.equals("")
+                        && !height.equals("")) {
+                    Toast.makeText(this, "You have registered successfully !!",
+                            Toast.LENGTH_LONG).show();
+                    helper.savePersonData(name, password, healthCardNumber, dateOfBirth);
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "All the fields are mandatory.",
+                            Toast.LENGTH_LONG).show();
+                }
+
                 break;
         }
 
