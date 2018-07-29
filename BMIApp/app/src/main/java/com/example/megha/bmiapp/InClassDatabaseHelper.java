@@ -1,4 +1,5 @@
 package com.example.megha.bmiapp;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
@@ -54,6 +55,12 @@ public class InClassDatabaseHelper extends SQLiteOpenHelper{
         bmiValues.put("BMIRESULT", BMIResult);
         db.insert(TABLE_NAME1,null, bmiValues);
         db.close();
+    }
+
+    public Cursor getBMIHistoryData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.query(InClassDatabaseHelper.TABLE_NAME1, new String[]{"HEIGHT"}, null, null, null, null, null);
+        return  data;
     }
 
     @Override

@@ -13,19 +13,39 @@ public class Calculate_BMI extends AppCompatActivity {
 
     InClassDatabaseHelper helper;
     Button calculateBMIButton;
+    Button btnViewBMIHistory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate__bmi);
         helper = new InClassDatabaseHelper(this);
 
+        btnViewBMIHistory = (Button) findViewById(R.id.btnViewBMIHistory);
+
+        btnViewBMIHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Calculate_BMI.this, BMIListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
     }
 
     public void calculateBMI(View view)
     {
         //gets the height
+        //Bundle bundle = getIntent().getExtras();
+       // double heightVal= bundle.getDouble("height");
         EditText height = (EditText) findViewById(R.id.textHeight);
-        String heightvalue = height.getText().toString();
+       // String heightvalue =
+        // height.setText(String.valueOf(heightVal));
+       String heightvalue = height.getText().toString();
         Double heightVal = Double.parseDouble(heightvalue);
         System.out.println("Here is the height " + heightVal);
 
@@ -46,6 +66,6 @@ public class Calculate_BMI extends AppCompatActivity {
 
         helper.saveBMIData(heightVal,weightVal,calc);
 
-
     }
+
 }

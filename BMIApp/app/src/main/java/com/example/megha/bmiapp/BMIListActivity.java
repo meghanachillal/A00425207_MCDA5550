@@ -1,60 +1,50 @@
 package com.example.megha.bmiapp;
 
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class BMIListActivity extends ListActivity {
 
-    BMIResult[] results = {new BMIResult(5.5, 100), new BMIResult(4.3, 156)};
+    InClassDatabaseHelper helper;
+    ListView listBMIResults;
+    //BMIResult[] results = {new BMIResult(5.5, 100), new BMIResult(4.3, 156)};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bmilist);
 
-        ListView listBMIResults = getListView();
-        ArrayAdapter<BMIResult> listAdapter = new ArrayAdapter<BMIResult>(this,
+         listBMIResults = (ListView) findViewById(android.R.id.list);
+        helper = new InClassDatabaseHelper(this);
+        ArrayList<String> bmiResults = new ArrayList<>();
+        Cursor data = helper.getBMIHistoryData();
 
-                android.R.layout.simple_list_item_1,
-                results
-        );
+        if (data.getCount() == 0) {
+            Toast.makeText(BMIListActivity.this, "No History of BMI Details stored : (.", Toast.LENGTH_LONG).show();
 
-        listBMIResults.setAdapter(listAdapter);
+        } else {
+            int i=0;
+            while (data.moveToNext()) {
+                bmiResults.add(data.getString(0));
+                ListAdapter listAdapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_list_item_1,
+                        bmiResults
+                );
+                listBMIResults.setAdapter(listAdapter);
+            }
+        }
 
 
     }
+}
 
-    //Add to Activity on CLick
-    public  void onListItemClick(ListView listView, View itemView , int position , long id)
-    {
-        System.out.println("Clicked on" + results[position].toString());
-    }
-
-    public  class  BMIResult {
-        private double height = 1;
-        private  double weight = 1;
-        // TO do add the Date
-
-        public  BMIResult(double height , double weight ){
-            this.height = height;
-            this.weight = weight;
-        }
-
-        public  double getHeight(){return  height;}
-        public  void  setHeight (double height){this.height = height;}
-
-        public  double getWeight(){return  weight;}
-        public  void  setWeight (double weight){this.weight = weight;}
-
-        public  double getResult(){
-            return  weight/(height*height);
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(getResult());}
-        }
-    }
 
